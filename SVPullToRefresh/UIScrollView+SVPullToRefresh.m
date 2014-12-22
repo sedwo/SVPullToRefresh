@@ -282,15 +282,15 @@ static char UIScrollViewPullToRefreshView;
         self.titleLabel.text = [self.titles objectAtIndex:self.state];
         
         NSString *subtitle = [self.subtitles objectAtIndex:self.state];
-        self.subtitleLabel.text = subtitle.length > 0 ? subtitle : nil;
+        self.subtitleLabel.text = subtitle.length > 0 ? subtitle : @" ";
         // Let's make an NSAttributedString first
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.titleLabel.text];
         //Add LineBreakMode
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         [paragraphStyle setLineBreakMode:self.titleLabel.lineBreakMode];
-        [attributedString setAttributes:@{NSParagraphStyleAttributeName:paragraphStyle} range:NSMakeRange(0, attributedString.length)];
+        [attributedString setAttributes:@{NSParagraphStyleAttributeName:paragraphStyle} range:(NSRange){0, attributedString.length}];
         // Add Font
-        [attributedString setAttributes:@{NSFontAttributeName:self.titleLabel.font} range:NSMakeRange(0, attributedString.length)];
+        [attributedString setAttributes:@{NSFontAttributeName:self.titleLabel.font} range:(NSRange){0, attributedString.length}];
         
         //Now let's make the Bounding Rect
         CGSize titleSize = [attributedString boundingRectWithSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
@@ -300,12 +300,12 @@ static char UIScrollViewPullToRefreshView;
         //Add LineBreakMode
         NSMutableParagraphStyle *paragraphSStyle = [NSMutableParagraphStyle new];
         [paragraphSStyle setLineBreakMode:self.subtitleLabel.lineBreakMode];
-        [attributedSString setAttributes:@{NSParagraphStyleAttributeName:paragraphSStyle} range:NSMakeRange(0, attributedString.length)];
+        [attributedSString setAttributes:@{NSParagraphStyleAttributeName:paragraphSStyle} range:(NSRange){0, attributedSString.length}];
         // Add Font
-        [attributedSString setAttributes:@{NSFontAttributeName:self.subtitleLabel.font} range:NSMakeRange(0, attributedString.length)];
+        [attributedSString setAttributes:@{NSFontAttributeName:self.subtitleLabel.font} range:(NSRange){0, attributedSString.length}];
         
         //Now let's make the Bounding Rect
-        CGSize subtitleSize = [attributedString boundingRectWithSize:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+        CGSize subtitleSize = [attributedSString boundingRectWithSize:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
 
         CGFloat maxLabelWidth = MAX(titleSize.width,subtitleSize.width);
         
