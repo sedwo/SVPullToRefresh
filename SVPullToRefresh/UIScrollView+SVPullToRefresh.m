@@ -360,7 +360,7 @@ static char UIScrollViewPullToRefreshView;
 }
 
 - (void)setScrollViewContentInsetForLoading {
-    CGFloat offset = MAX(self.scrollView.contentOffset.y * -1, 0);
+    CGFloat offset = MAX(self.scrollView.contentOffset.y * -1, self.originalTopInset);
     UIEdgeInsets currentInsets = self.scrollView.contentInset;
     switch (self.position) {
         case SVPullToRefreshPositionTop:
@@ -371,7 +371,26 @@ static char UIScrollViewPullToRefreshView;
             break;
     }
     [self setScrollViewContentInset:currentInsets];
+//    self.scrollView.contentInset = currentInsets;
+
+    [self setScrollViewContentOffset];    
 }
+
+
+
+- (void)setScrollViewContentOffset
+{
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.scrollView.contentOffset = CGPointMake(0, -self.bounds.size.height + self.frame.origin.y);
+                     }
+                     completion:NULL];
+
+}
+
+
 
 - (void)setScrollViewContentInset:(UIEdgeInsets)contentInset {
     [UIView animateWithDuration:0.3
@@ -434,7 +453,7 @@ static char UIScrollViewPullToRefreshView;
         UIEdgeInsets contentInset;
         switch (self.position) {
             case SVPullToRefreshPositionTop:
-                offset = MAX(self.scrollView.contentOffset.y * -1, 0.0f);
+                offset = MAX(self.scrollView.contentOffset.y * -1, self.originalTopInset);
                 offset = MIN(offset, self.originalTopInset + self.bounds.size.height);
                 contentInset = self.scrollView.contentInset;
                 self.scrollView.contentInset = UIEdgeInsetsMake(offset, contentInset.left, contentInset.bottom, contentInset.right);
